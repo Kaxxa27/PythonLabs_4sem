@@ -2,9 +2,14 @@ import re
 
 
 def text_analysis(text_list):
-    amount_of_sent = amount_of_sentences(text_list)
-    amount_non_declarative_sent = amount_of_non_decl_sentences(text_list)
-    average_len_of_the_word, average_len_of_the_sent = average_word_and_sent_length(text_list)
+    try:
+        amount_of_sent = amount_of_sentences(text_list)
+        amount_non_declarative_sent = amount_of_non_decl_sentences(text_list)
+        average_len_of_the_word, average_len_of_the_sent = average_word_and_sent_length(text_list)
+    except ZeroDivisionError:
+        print("Oops. Text length is 0.\n")
+    except BaseException:
+        print("Exception caught in text_analysis.")
 
     return amount_of_sent, amount_non_declarative_sent, \
         average_len_of_the_word, average_len_of_the_sent
