@@ -1,23 +1,23 @@
-import fileservice
-import regexservice
-import constants
-import stringgluer
-import analizator
+from fileservice import open_file
+from regexservice import text_analysis_with_regex
+from constants import CONSTANTS_FOR_SWITCHING, CONSTANTS_FOR_CONTINUE
+from stringgluer import text_gluer_with_constants
+from analizator import text_analysis, generate_ngrams
 
 
 def main():
     # regex = r"[A-Z][^.!?]*((\.{3})|(\.)|(\!?\??\!?))"
     regex = r"\S[^.?!]+[.!?]*"
 
-    text = fileservice.open_file("text.txt", "r")
-    my_list = regexservice.text_analysis_with_regex(regex, text)
+    text = open_file("text.txt", "r")
+    my_list = text_analysis_with_regex(regex, text)
 
-    new_list = stringgluer.text_gluer_with_constants(my_list,
-                                                     constants.CONSTANTS_FOR_SWITCHING,
-                                                     constants.CONSTANTS_FOR_CONTINUE)
+    new_list = text_gluer_with_constants(my_list,
+                                         CONSTANTS_FOR_SWITCHING,
+                                         CONSTANTS_FOR_CONTINUE)
 
-    am_sent, am_non_sent, av_len_w, av_len_s = analizator.text_analysis(new_list)
-    top_ngram = analizator.generate_ngrams(text, 3)
+    am_sent, am_non_sent, av_len_w, av_len_s = text_analysis(new_list)
+    top_ngram = generate_ngrams(text, 3)
 
     print(f"Amount of sentences in the text: {am_sent}")
     print(f"Amount of non-declarative sentences in the text: {am_non_sent}")
