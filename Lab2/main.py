@@ -1,15 +1,15 @@
-from fileservice import open_file
-from regexservice import text_analysis_with_regex
+from Toolkit.fileservice import open_file
+from Toolkit.regexservice import text_analysis_with_regex
+from Toolkit.stringgluer import text_gluer_with_constants
+from Toolkit.analizator import text_analysis, generate_ngrams
 from constants import CONSTANTS_FOR_SWITCHING, CONSTANTS_FOR_CONTINUE
-from stringgluer import text_gluer_with_constants
-from analizator import text_analysis, generate_ngrams
 
 
 def main():
     # regex = r"[A-Z][^.!?]*((\.{3})|(\.)|(\!?\??\!?))"
     regex = r"\S[^.?!]+[.!?]*"
 
-    text = open_file("text.txt", "r")
+    text = open_file("TestTxtFiles/text.txt", "r")
     my_list = text_analysis_with_regex(regex, text)
 
     new_list = text_gluer_with_constants(my_list,
