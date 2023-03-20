@@ -9,7 +9,7 @@ def main():
     # regex = r"[A-Z][^.!?]*((\.{3})|(\.)|(\!?\??\!?))"
     regex = r"\S[^.?!]+[.!?]*"
 
-    text = open_file("TestTxtFiles/text.txt", "r")
+    text = open_file("Task1/TestTxtFiles/text.txt", "r")
     my_list = text_analysis_with_regex(regex, text)
 
     new_list = text_gluer_with_constants(my_list,

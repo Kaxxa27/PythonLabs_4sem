@@ -1,9 +1,9 @@
 import unittest
 
-from Toolkit.regexservice import text_analysis_with_regex
-from Toolkit.stringgluer import text_gluer_with_constants
-from constants import CONSTANTS_FOR_SWITCHING, CONSTANTS_FOR_CONTINUE
-from Toolkit.analizator import (
+from Task1.Toolkit.regexservice import text_analysis_with_regex
+from Task1.Toolkit.stringgluer import text_gluer_with_constants
+from Task1.constants import CONSTANTS_FOR_SWITCHING, CONSTANTS_FOR_CONTINUE
+from Task1.Toolkit.analizator import (
     amount_of_sentences,
     amount_of_non_decl_sentences,
     average_word_and_sent_length
