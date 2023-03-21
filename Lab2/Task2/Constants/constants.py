@@ -13,6 +13,7 @@ COMMANDS = [
     "help",
     "list",
     "clear",
+    "switch",
     "exit",
 ]
 
