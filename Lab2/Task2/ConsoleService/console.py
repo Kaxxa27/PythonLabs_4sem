@@ -15,7 +15,7 @@ class Console:
                 command = input("Enter command: ")
             except KeyboardInterrupt:
                 if authorization:
-                    check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage())
+                    check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage)
                     break
                 else:
                     print("\n*** Exception! ***\nHard exit from the program.")
@@ -26,14 +26,14 @@ class Console:
                 login = input("Enter your login: ")
                 user = User(login)
 
-                check_answer("Do you want to load a container? [Yes/No]: ", user.load_storage())
+                check_answer("Do you want to load a container? [Yes/No]: ", user.load_storage)
 
             elif command == "help":
                 self.print_command()
                 continue
             elif command == "exit":
                 if authorization:
-                    check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage())
+                    check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage)
                 break
 
             if authorization:
@@ -53,6 +53,10 @@ class Console:
                     user.save_storage()
                 elif command == "load":
                     user.load_storage()
+                elif command == "switch":
+                    check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage)
+                    authorization = False
+                    user.storage.clear()
             else:
                 print("You are not registered.\nPlease register by entering the login command.")
 
@@ -67,7 +71,7 @@ def check_answer(question, command):
     while True:
         answer = input(question)
         if answer == "Yes":
-            command
+            command()
             break
         elif answer == "No":
             break
