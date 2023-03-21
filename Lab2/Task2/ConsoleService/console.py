@@ -1,4 +1,5 @@
 from Task2.UserService.user import User
+from Task2.Constants.constants import COMMANDS
 
 
 class Console:
@@ -10,53 +11,65 @@ class Console:
         self.print_command()
 
         while True:
-            command = input("Enter command: ")
+            try:
+                command = input("Enter command: ")
+            except KeyboardInterrupt:
+                if authorization:
+                    check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage())
+                    break
+                else:
+                    print("\n*** Exception! ***\nHard exit from the program.")
+                    break
+
             if command == "login":
                 authorization = True
                 login = input("Enter your login: ")
                 user = User(login)
 
-                while True:
-                    answer = input("Do you want to load a container? [Yes/No]: ")
-                    if answer == "Yes":
-                        user.load_storage()
-                        break
-                    elif answer == "No":
-                        break
-                    else:
-                        print("Wrong input!\nEnter Yes/No please.")
-            if command == "help":
+                check_answer("Do you want to load a container? [Yes/No]: ", user.load_storage())
+
+            elif command == "help":
                 self.print_command()
                 continue
-            if command == "exit":
+            elif command == "exit":
+                if authorization:
+                    check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage())
                 break
+
             if authorization:
                 if command == "add":
                     user.add_element(input("(add) Enter element: "))
-                if command == "remove":
+                elif command == "remove":
                     user.remove_element(input("(remove) Enter element: "))
-                if command == "list":
+                elif command == "list":
                     user.print_element()
-                if command == "find":
+                elif command == "clear":
+                    user.storage.clear()
+                elif command == "find":
                     user.find_element(input("(find) Enter element: "))
-                if command == "grep":
+                elif command == "grep":
                     user.find_with_regex(input("(grep) Enter regex: "))
-                if command == "save":
+                elif command == "save":
                     user.save_storage()
-                if command == "load":
+                elif command == "load":
                     user.load_storage()
             else:
                 print("You are not registered.\nPlease register by entering the login command.")
 
-    def print_command(self):
+    @staticmethod
+    def print_command():
         print("Menu:")
-        print("1. login:")
-        print("2. add: ")
-        print("3. remove: ")
-        print("4. find: ")
-        print("5. grep: ")
-        print("6. save: ")
-        print("7. load: ")
-        print("8. help: ")
-        print("9. list: ")
-        print("10. exit: ")
+        for index in range(len(COMMANDS)):
+            print(f"{index + 1}. {COMMANDS[index]}")
+
+
+def check_answer(question, command):
+    while True:
+        answer = input(question)
+        if answer == "Yes":
+            command
+            break
+        elif answer == "No":
+            break
+        else:
+            print("Wrong input!\nEnter Yes/No please.")
