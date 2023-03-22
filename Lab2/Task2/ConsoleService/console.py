@@ -1,3 +1,5 @@
+import re
+
 from Task2.UserService.user import User
 from Task2.Constants.constants import COMMANDS
 
@@ -24,6 +26,9 @@ class Console:
             if command == "login":
                 authorization = True
                 login = input("Enter your login: ")
+                if not self.check_login(login):
+                    print("Incorrect login was entered.\nOnly letters, numbers and underscores are allowed.")
+                    continue
                 user = User(login)
 
                 check_answer("Do you want to load a container? [Yes/No]: ", user.load_storage)
@@ -65,6 +70,9 @@ class Console:
         print("Menu:")
         for index in range(len(COMMANDS)):
             print(f"{index + 1}. {COMMANDS[index]}")
+
+    def check_login(self, login):
+        return re.fullmatch(r'[a-zA-Z0-9_]+', login)
 
 
 def check_answer(question, command):
