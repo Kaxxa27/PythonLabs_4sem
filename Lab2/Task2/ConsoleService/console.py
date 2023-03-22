@@ -11,10 +11,10 @@ class Console:
     def start(self):
         authorization = False
         self.print_command()
-
+        login = "Guest"
         while True:
             try:
-                command = input("Enter command: ")
+                command = input(f"[{login}] --> Enter command: ")
             except KeyboardInterrupt:
                 if authorization:
                     check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage)
@@ -61,6 +61,7 @@ class Console:
                 elif command == "switch":
                     check_answer("\nWant to save storage before you go out? [Yes/No]: ", user.save_storage)
                     authorization = False
+                    login = "Guest"
                     user.storage.clear()
             else:
                 print("You are not registered.\nPlease register by entering the login command.")
