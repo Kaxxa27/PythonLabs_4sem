@@ -7,7 +7,9 @@ from constants import CONSTANTS_FOR_SWITCHING, CONSTANTS_FOR_CONTINUE
 
 def main():
     # regex = r"[A-Z][^.!?]*((\.{3})|(\.)|(\!?\??\!?))"
-    regex = r"\S[^.?!]+[.!?]*"
+    # regex = r"\S[^.?!]+[.!?]*"
+    # regex = r"\S[^.?!]+[.!?]+(?=\s|$)"
+    regex = r"\w.*?(?:!|\?|\.|\.\.\.)+(?=\s|$)"
 
     #text = open_file("Task1/TestTxtFiles/text.txt", "r")
     text = open_file("TestTxtFiles/text.txt", "r")
@@ -16,6 +18,8 @@ def main():
     new_list = text_gluer_with_constants(my_list,
                                          CONSTANTS_FOR_SWITCHING,
                                          CONSTANTS_FOR_CONTINUE)
+    for item in new_list:
+        print(item)
 
     am_sent, am_non_sent, av_len_w, av_len_s = text_analysis(new_list)
     top_ngram = generate_ngrams(text, 3)
