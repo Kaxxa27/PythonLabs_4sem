@@ -7,8 +7,8 @@ class Storage:
         self.path = create_filename(filename)
         self.storage_set = set()
 
-    def add(self, *key):
-        self.storage_set.add(*key)
+    def add(self, key):
+        self.storage_set.add(key)
 
     def remove(self, key):
         if key in self.storage_set:

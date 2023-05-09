@@ -58,7 +58,13 @@ def generate_ngrams(text, k=10, n=4):
     text = re.sub(r"[^a-zA-Z0-9]", " ", text)
     words = [word for word in text.split(" ") if word != ""]
     # Zip(*arr) == zip(arr[0], arr[1], ...)
+
+    # [1,2,3]
+    # [4,5,6]
+    # [7,8,9,10]
+    # ->
     ngrams = zip(*[words[i:] for i in range(n)])
+
     max_len_ngrams = [" ".join(ngram) for ngram in ngrams]
     max_len_ngrams.sort(key=len, reverse=True)
     return max_len_ngrams[:k]

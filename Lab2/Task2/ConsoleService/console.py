@@ -43,7 +43,9 @@ class Console:
 
             if authorization:
                 if command == "add":
-                    user.add_element(input("(add) Enter element: "))
+                    count = int(input("Number of elements: "))
+                    for index in range(count):
+                        user.add_element(input("(add) Enter element: "))
                 elif command == "remove":
                     user.remove_element(input("(remove) Enter element: "))
                 elif command == "list":

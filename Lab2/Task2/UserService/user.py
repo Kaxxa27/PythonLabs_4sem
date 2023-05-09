@@ -6,8 +6,8 @@ class User:
         self.name = name
         self.storage = Storage(name)
 
-    def add_element(self, *key):
-        self.storage.add(*key)
+    def add_element(self, key):
+        self.storage.add(key)
 
     def remove_element(self, key):
         self.storage.remove(key)
