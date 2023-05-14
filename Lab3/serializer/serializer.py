@@ -34,6 +34,10 @@ class Serializer:
         elif inspect.isfunction(obj):
             return self.serialize_function(obj)
 
+        # Serialization code.
+        elif inspect.iscode(obj):
+            return self.serialize_code(obj)
+
 
 
     def serialize_basic_types(self, obj):
@@ -103,3 +107,10 @@ class Serializer:
                     globs[global_variable] = self.serialize(obj.__name__)
 
         return globs
+
+        def serialize_code(self, obj):
+            serialize_result = dict()
+            serialize_result["type"] = "code"
+            serialize_result["value"] = {key: self.serialize(value) for key, value in inspect.getmembers(obj)
+                                         if key in CODE_PROPERTIES}
+            return serialize_result
