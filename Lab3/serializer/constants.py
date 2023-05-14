@@ -37,3 +37,6 @@ TYPES = (
     types.GetSetDescriptorType,
     types.MappingProxyType
 )
+
+DECORATOR_METHODS = {"staticmethod": staticmethod, "classmethod": classmethod}
+
