@@ -3,7 +3,7 @@ import inspect
 import re
 from serializer.constants import BASIC_TYPES, SET_TYPES, SEQUENCE_TYPES, \
     BINARY_SEQUENCE_TYPES, SAME_SEQUENCE_TYPES, MAPPING_TYPES, ALL_COLLECTIONS_TYPES, \
-    CODE_PROPERTIES, CLASS_PROPERTIES, TYPES
+    CODE_PROPERTIES, CLASS_PROPERTIES, TYPES, DECORATOR_METHODS
 
 
 class Serializer:
@@ -189,3 +189,104 @@ class Serializer:
         value["__members__"] = {key: self.serialize(value) for key, value in inspect.getmembers(obj)
                                 if not (key.startswith("__") or inspect.isfunction(value) or inspect.ismethod(value))}
         return value
+
+    def deserialize(self, obj):
+
+        if obj["type"] in self.extract_keys(str(BASIC_TYPES.keys())):
+            return self.deserialize_basic_types(obj)
+
+        elif obj["type"] in str(SAME_SEQUENCE_TYPES.keys()):
+            return self.deserialize_collections(obj)
+
+        elif obj["type"] == "code":
+            return self.deserialize_code(obj["value"])
+
+        elif obj["type"] == "function":
+            return self.deserialize_function(obj["value"])
+
+        elif obj["type"] == "cell":
+            return self.deserialize_cell(obj)
+
+        elif obj["type"] == "class":
+            return self.deserialize_class(obj["value"])
+
+        elif obj["type"] in DECORATOR_METHODS:
+            return DECORATOR_METHODS[obj["type"]](self.deserialize(obj["value"]))
+
+        elif obj["type"] == "object":
+            return self.deserialize_object(obj["value"])
+
+    def deserialize_basic_types(self, obj):
+        return BASIC_TYPES[obj["type"]](obj["value"])
+
+    def deserialize_collections(self, obj):
+        collection_type = obj["type"]
+
+        if collection_type in SAME_SEQUENCE_TYPES.keys():
+            return SAME_SEQUENCE_TYPES[collection_type](self.deserialize(item) for item in obj["value"])
+
+        elif collection_type in ALL_COLLECTIONS_TYPES.keys():
+            return ALL_COLLECTIONS_TYPES[collection_type](
+                {self.deserialize(item[0]): self.deserialize(item[1]) for item in obj["value"]})
+
+    def deserialize_code(self, code):
+        return types.CodeType(*(self.deserialize(code[prop]) for prop in CODE_PROPERTIES))
+
+    def deserialize_function(self, func):
+        code = func["__code__"]
+        globs = func["__globals__"]
+        func_closure = func["__closure__"]
+        des_globals = self.deserialize_globals(globs, func)
+
+        cl = self.deserialize(func_closure)
+        if cl:
+            closure = tuple(cl)
+        else:
+            closure = tuple()
+        codeType = self.deserialize_code(code)
+
+        des_globals["__builtins__"] = __import__("builtins")
+        des_function = types.FunctionType(code=codeType, globals=des_globals, closure=closure)
+        des_function.__globals__.update({des_function.__name__: des_function})
+
+        return des_function
+
+    def deserialize_globals(self, globs, func):
+        des_globals = dict()
+
+        for glob in globs:
+            if "module" in glob:
+                des_globals[globs[glob]["value"]] = __import__(globs[glob]["value"])
+
+            elif globs[glob] != func["__name__"]:
+                des_globals[glob] = self.deserialize(globs[glob])
+
+        return des_globals
+
+    def deserialize_cell(self, obj):
+        return types.CellType(self.deserialize(obj["value"]))
+
+    def deserialize_class(self, obj):
+        bases = self.deserialize(obj["__bases__"])
+
+        members = {member: self.deserialize(value) for member, value in obj.items()}
+
+        cls = type(self.deserialize(obj["__name__"]), bases, members)
+
+        for k, member in members.items():
+            if inspect.isfunction(member):
+                member.__globals__.update({cls.__name__: cls})
+            elif isinstance(member, (staticmethod, classmethod)):
+                member.__func__.__globals__.update({cls.__name__: cls})
+
+        return cls
+
+    def deserialize_object(self, obj):
+        cls = self.deserialize(obj["__class__"])
+        des = object.__new__(cls)
+        des.__dict__ = {key: self.deserialize(value) for key, value in obj["__members__"].items()}
+        return des
+
+    # def(BASIC_TYPES) -> return  str: [ int, float, complex, ... ]
+    def extract_keys(self, string) -> str:
+        return re.search(r"\[.*\]", string).group()
