@@ -38,6 +38,10 @@ class Serializer:
         elif inspect.iscode(obj):
             return self.serialize_code(obj)
 
+        # Serialization cell.
+        elif isinstance(obj, types.CellType):
+            return self.serialize_cell(obj)
+
 
 
     def serialize_basic_types(self, obj):
@@ -108,9 +112,15 @@ class Serializer:
 
         return globs
 
-        def serialize_code(self, obj):
-            serialize_result = dict()
-            serialize_result["type"] = "code"
-            serialize_result["value"] = {key: self.serialize(value) for key, value in inspect.getmembers(obj)
-                                         if key in CODE_PROPERTIES}
-            return serialize_result
+    def serialize_code(self, obj):
+        serialize_result = dict()
+        serialize_result["type"] = "code"
+        serialize_result["value"] = {key: self.serialize(value) for key, value in inspect.getmembers(obj)
+                                     if key in CODE_PROPERTIES}
+        return serialize_result
+
+    def serialize_cell(self, obj):
+        serialize_result = dict()
+        serialize_result["type"] = "cell"
+        serialize_result["value"] = self.serialize(obj.cell_contents)
+        return serialize_result
