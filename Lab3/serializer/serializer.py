@@ -2,7 +2,8 @@ import types
 import inspect
 import re
 from serializer.constants import BASIC_TYPES, SET_TYPES, SEQUENCE_TYPES, \
-    BINARY_SEQUENCE_TYPES, SAME_SEQUENCE_TYPES, MAPPING_TYPES, ALL_COLLECTIONS_TYPES, CODE_PROPERTIES
+    BINARY_SEQUENCE_TYPES, SAME_SEQUENCE_TYPES, MAPPING_TYPES, ALL_COLLECTIONS_TYPES, \
+    CODE_PROPERTIES, CLASS_PROPERTIES, TYPES
 
 
 class Serializer:
@@ -42,7 +43,12 @@ class Serializer:
         elif isinstance(obj, types.CellType):
             return self.serialize_cell(obj)
 
+        # Serialization class.
+        elif inspect.isclass(obj):
+            return self.serialize_class(obj)
 
+        else:
+            return self.serialize_object(obj)
 
     def serialize_basic_types(self, obj):
         serialize_result = dict()
@@ -50,7 +56,7 @@ class Serializer:
         serialize_result["value"] = obj
         return serialize_result
 
-    def serialize_none_type(self, obj):
+    def serialize_none_type(self):
         serialize_result = dict()
         serialize_result["type"] = "NoneType"
         # serialize_result["value"] = "definitely none"
@@ -124,3 +130,62 @@ class Serializer:
         serialize_result["type"] = "cell"
         serialize_result["value"] = self.serialize(obj.cell_contents)
         return serialize_result
+
+    def serialize_class(self, obj):
+        serialize_result = dict()
+        serialize_result["type"] = "class"
+        serialize_result["value"] = self.total_class_serialize(obj)
+        return serialize_result
+
+    def total_class_serialize(self, obj):
+        serialize_result = dict()
+        serialize_result["__name__"] = self.serialize(obj.__name__)
+
+        for key, value in obj.__dict__.items():
+
+            if key in CLASS_PROPERTIES or type(value) in TYPES:
+                continue
+
+            if isinstance(obj.__dict__[key], staticmethod):
+                serialize_result[key] = dict()
+                serialize_result[key]["type"] = "staticmethod"
+                serialize_result[key]["value"] = {
+                    "type": "function", "value": self.total_function_serialize(value.__func__, obj)
+                }
+
+            elif isinstance(obj.__dict__[key], classmethod):
+                serialize_result[key] = dict()
+                serialize_result[key]["type"] = "classmethod"
+                serialize_result[key]["value"] = {
+                    "type": "function", "value": self.total_function_serialize(value.__func__, obj)
+                }
+
+            elif inspect.ismethod(value):
+                serialize_result[key] = self.total_function_serialize(value.__func__, obj)
+
+            elif inspect.isfunction(value):
+                serialize_result[key] = dict()
+                serialize_result[key]["type"] = "function"
+                serialize_result[key]["value"] = self.total_function_serialize(value, obj)
+
+            else:
+                serialize_result[key] = self.serialize(value)
+
+        serialize_result["__bases__"] = dict()
+        serialize_result["__bases__"]["type"] = "tuple"
+        serialize_result["__bases__"]["value"] = [self.serialize(base) for base in obj.__bases__ if base != object]
+
+        return serialize_result
+
+    def serialize_object(self, obj):
+        serialize_result = dict()
+        serialize_result["type"] = "object"
+        serialize_result["value"] = self.total_object_serialization(obj)
+        return serialize_result
+
+    def total_object_serialization(self, obj):
+        value = dict()
+        value["__class__"] = self.serialize(obj.__class__)
+        value["__members__"] = {key: self.serialize(value) for key, value in inspect.getmembers(obj)
+                                if not (key.startswith("__") or inspect.isfunction(value) or inspect.ismethod(value))}
+        return value
