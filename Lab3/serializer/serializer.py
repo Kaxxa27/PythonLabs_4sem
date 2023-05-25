@@ -3,7 +3,7 @@ import inspect
 import re
 from serializer.constants import BASIC_TYPES, SET_TYPES, SEQUENCE_TYPES, \
     BINARY_SEQUENCE_TYPES, SAME_SEQUENCE_TYPES, MAPPING_TYPES, ALL_COLLECTIONS_TYPES, \
-    CODE_PROPERTIES, CLASS_PROPERTIES, TYPES, DECORATOR_METHODS
+    CODE_PROPERTIES, CLASS_PROPERTIES, TYPES, DECORATOR_METHODS, ITERABLE_TYPE
 
 
 class Serializer:
@@ -16,6 +16,9 @@ class Serializer:
         # Serialization of basic types.
         if isinstance(obj, tuple(BASIC_TYPES.values())):
             return self.__serialize_basic_types__(obj)
+
+        elif Serializer.is_iterator(obj):
+            return self.__serialize_iterator(obj)
 
         # Serialization None type.
         elif isinstance(obj, types.NoneType):
@@ -58,6 +61,12 @@ class Serializer:
         serialize_result = dict()
         serialize_result["type"] = self.get_object_type(obj)
         serialize_result["value"] = obj
+        return serialize_result
+
+    def __serialize_iterator(self, obj):
+        serialize_result = dict()
+        serialize_result["type"] = ITERABLE_TYPE
+        serialize_result["value"] = list(map(self.serialize, obj))
         return serialize_result
 
     def __serialize_none_type__(self):
@@ -199,6 +208,9 @@ class Serializer:
         if obj["type"] in self.extract_keys(str(BASIC_TYPES.keys())):
             return self.__deserialize_basic_types__(obj)
 
+        elif obj["type"] == ITERABLE_TYPE:
+            return self.__deserialize_iterator(obj)
+
         elif obj["type"] in str(SAME_SEQUENCE_TYPES.keys()):
             return self.__deserialize_collections__(obj)
 
@@ -219,6 +231,9 @@ class Serializer:
 
         elif obj["type"] == "object":
             return self.__deserialize_object__(obj["value"])
+
+    def __deserialize_iterator(self, obj):
+        return iter(self.deserialize(item) for item in obj["value"])
 
     def __deserialize_basic_types__(self, obj):
         return BASIC_TYPES[obj["type"]](obj["value"])
