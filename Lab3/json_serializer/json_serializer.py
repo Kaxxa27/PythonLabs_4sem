@@ -40,7 +40,7 @@ class JSON_Serializer(Serializer):
 
         match = regex.fullmatch(JSON_BOOL, string)
         if match:
-            return match.group(0) == "true"
+            return match.group(0) == "True"
 
         match = regex.fullmatch(JSON_NONE, string)
         if match:

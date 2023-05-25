@@ -73,6 +73,7 @@ class Serializer:
                                      "fset": self.serialize(obj.fset),
                                      "fdel": self.serialize(obj.fdel)}
         return serialize_result
+
     def __serialize_iterator(self, obj):
         serialize_result = dict()
         serialize_result["type"] = ITERABLE_TYPE
@@ -252,7 +253,10 @@ class Serializer:
         return property(fget=self.deserialize(obj["value"]["fget"]),
                         fset=self.deserialize(obj["value"]["fset"]),
                         fdel=self.deserialize(obj["value"]["fdel"]))
+
     def __deserialize_basic_types__(self, obj):
+        if obj["type"] == bool.__name__:
+            return obj["value"]
         return BASIC_TYPES[obj["type"]](obj["value"])
 
     def __deserialize_collections__(self, obj):

@@ -1,6 +1,6 @@
 JSON_INT = r"[+-]?\d+"
 JSON_FLOAT = fr"({JSON_INT}(?:\.\d+)?(?:e{JSON_INT})?)"
-JSON_BOOL = r"((true)|(false))\b"
+JSON_BOOL = r"((True)|(False))\b"
 JSON_STR = r"\"((\\\")|[^\"])*\""
 JSON_NONE = r"\b(Null)\b"
 JSON_COMPLEX = fr"{JSON_FLOAT}{JSON_FLOAT}j"
