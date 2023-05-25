@@ -110,6 +110,8 @@ class Serializer:
         value["__name__"] = obj.__name__
         value["__globals__"] = self.__get_globals__(obj, cls)
         value["__closure__"] = self.serialize(obj.__closure__)
+        value["__defaults__"] = self.serialize(obj.__defaults__)
+        value["__kwdefaults__"] = self.serialize(obj.__kwdefaults__)
         value["__code__"] = {key: self.serialize(value) for key, value in inspect.getmembers(obj.__code__)
                              if key in CODE_PROPERTIES}
         return value
@@ -288,6 +290,9 @@ class Serializer:
         des_globals["__builtins__"] = __import__("builtins")
         des_function = types.FunctionType(code=codeType, globals=des_globals, closure=closure)
         des_function.__globals__.update({des_function.__name__: des_function})
+
+        des_function.__defaults__ = self.deserialize(func["__defaults__"])
+        des_function.__kwdefaults__ = self.deserialize(func["__kwdefaults__"])
 
         return des_function
 

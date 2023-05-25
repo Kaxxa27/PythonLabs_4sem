@@ -30,11 +30,15 @@ class Human:
     def static():
         return 'It is static'
 
-if __name__ == '__main__':
 
+def test(a, x=1234183745672634506324508327465982634789569283456987235031864509, y=0):
+    print(f"x:{x}{a} - y:{y}")
+
+
+if __name__ == '__main__':
     json_ser = Serializer_Factory.create_serializer("json")
     json = JSON_Serializer()
-    data = 10 + 4j
+    data = test
     file = "Data.txt"
 
     with open(file, 'w') as f:
