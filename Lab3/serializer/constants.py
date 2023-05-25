@@ -30,6 +30,8 @@ CLASS_PROPERTIES = (
     "__class__"
 )
 
+ITERABLE_TYPE = "iterator"
+
 TYPES = (
     types.WrapperDescriptorType,
     types.MethodDescriptorType,
