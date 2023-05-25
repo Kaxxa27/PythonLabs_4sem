@@ -63,7 +63,7 @@ class Serializer:
     def __serialize_basic_types__(self, obj):
         serialize_result = dict()
         serialize_result["type"] = self.get_object_type(obj)
-        serialize_result["value"] = obj
+        serialize_result["value"] = obj if not isinstance(obj, complex) else str(obj)
         return serialize_result
 
     def __serialize_property(self, obj):

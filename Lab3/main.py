@@ -1,16 +1,50 @@
-# This is a sample Python script.
+from pprint import pprint
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from json_serializer.json_serializer import JSON_Serializer
+from serializer_factory.serializer_factory import Serializer_Factory
+class Human:
+    CONST = '123ABC456'
 
+    def __init__(self, age, name):
+        self._age = age
+        self._name = name
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    @property
+    def age(self):
+        return self._age
 
+    @age.setter
+    def age(self, age):
+        self._age = age
 
-# Press the green button in the gutter to run the script.
+    @age.deleter
+    def age(self):
+        del self._age
+        self._name = 'name after age deletion'
+
+    @classmethod
+    def get_const(cls):
+        return cls.CONST
+
+    @staticmethod
+    def static():
+        return 'It is static'
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    json_ser = Serializer_Factory.create_serializer("json")
+    json = JSON_Serializer()
+    data = 10 + 4j
+    file = "Data.txt"
+
+    with open(file, 'w') as f:
+        json.dump(data, f)
+
+    with open(file, 'r') as f:
+        result = json.load(f)
+
+    pprint(open(file, "r").read())
+    pprint(type(result))
+
+
+
