@@ -50,6 +50,10 @@ class Serializer:
         else:
             return self.__serialize_object__(obj)
 
+    @staticmethod
+    def is_iterator(obj):
+        return hasattr(obj, '__iter__') and hasattr(obj, '__next__') and callable(obj.__iter__)
+
     def __serialize_basic_types__(self, obj):
         serialize_result = dict()
         serialize_result["type"] = self.get_object_type(obj)
