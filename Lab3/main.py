@@ -1,64 +1,80 @@
 from pprint import pprint
-
-from json_serializer.json_serializer import JSON_Serializer
 from serializer_factory.serializer_factory import Serializer_Factory
-class Human:
-    CONST = '123ABC456'
-
-    def __init__(self, age, name):
-        self._age = age
-        self._name = name
-
-    @property
-    def age(self):
-        return self._age
-
-    @age.setter
-    def age(self, age):
-        self._age = age
-
-    @age.deleter
-    def age(self):
-        del self._age
-        self._name = 'name after age deletion'
-
-    @classmethod
-    def get_const(cls):
-        return cls.CONST
-
-    @staticmethod
-    def static():
-        return 'It is static'
+import argparse
+import configparser
 
 
 def test(sep=" "):
     def inside(string: str):
         return string.strip(sep)
+
     return inside
 
 
+
+def parse_config_file(config_file):
+    config = configparser.ConfigParser()
+    config.read(config_file)
+
+    if 'config' in config:
+        config_section = config['config']
+        if all(param in config_section
+               for param in ['source_file', 'source_format', 'destination_file', 'destination_format']):
+            return (config_section['source_file'], config_section['source_format'],
+                    config_section['destination_file'], config_section['destination_format'])
+
+    return None
+
+
+def parse_cli():
+    parser = argparse.ArgumentParser(description='JSON / XML serializer')
+    parser.add_argument('source_file', type=str, help='Path to source file')
+    parser.add_argument('source_format', type=str, choices=['json', 'xml'], help='Format of source file')
+    parser.add_argument('destination_file', type=str, help='Path to destination file')
+    parser.add_argument('destination_format', type=str, choices=['json', 'xml'], help='Format of destination file')
+    args = parser.parse_args()
+
+    return args.source_file, args.source_format, args.destination_file, args.destination_format
+
+
+def main():
+    config_file = 'config.ini'
+    config_values = parse_config_file(config_file)
+
+    source_file, source_format, destination_file, destination_format = config_values if config_values else parse_cli()
+
+    source_serializer = Serializer_Factory.create_serializer(source_format)
+    destination_serializer = Serializer_Factory.create_serializer(destination_format)
+
+    with open(source_file, "r") as file:
+        obj = source_serializer.load(file)
+
+    with open(destination_file, "w") as file:
+        destination_serializer.dump(obj, file)
+
+
 if __name__ == '__main__':
-    factory = Serializer_Factory()
-    json_ser = factory.create_serializer("json")
-    xml_ser = factory.create_serializer("xml")
-    data = Human(12,"Jeka")
-    file = "Data.txt"
+    main()
 
-    with open(file, 'w') as f:
-        xml_ser.dump(data, f)
-
-    with open(file, 'r') as f:
-        result = xml_ser.load(f)
-
-    pprint(open(file, "r").read())
-    pprint(type(result))
-    # pprint(list(result))
-
-    # test = result()
-    # pprint(test("Jeak sdfs f      "))
-
-
-
+# if __name__ == '__main__':
+#     factory = Serializer_Factory()
+#     json_ser = factory.create_serializer("json")
+#     xml_ser = factory.create_serializer("xml")
+#     data = test
+#     file = "default_files/source.txt"
+#
+#     # pprint(data("Jeka HOLLLA            "))
+#     with open(file, 'w') as f:
+#         json_ser.dump(data, f)
+#
+#     with open(file, 'r') as f:
+#         result = json_ser.load(f)
+#
+#     pprint(open(file, "r").read())
+#     pprint(type(result))
+#
+#     test = result()
+#     pprint(test("Jeak sdfs f      "))
 
 # import math
 # from pprint import pprint
