@@ -45,7 +45,7 @@ TEST_DICT = [
 ]
 
 TEST_GENERATOR = (item for item in range(10))
-TEST_LAMBDA = lambda x: x ** x ** 1 / 2
+TEST_LAMBDA = lambda x: x ** 3
 
 
 def test_closure(sep=" "):
@@ -69,14 +69,16 @@ class B(A):
     def info(self):
         return "Class B"
 
+class C(B):
+    def info(self):
+        return 'Class C'
+
 
 def default_value(x=0, y=0):
     return f"{x} + {y}"
 
 
-class C(B):
-    def info(self):
-        return 'Class C' + super().info()
+
 
 
 class Human:
@@ -97,7 +99,7 @@ class Human:
     @age.deleter
     def age(self):
         del self._age
-        self._name = 'name after age deletion'
+        self._name = 'DELETED'
 
     @classmethod
     def get_const(cls):
