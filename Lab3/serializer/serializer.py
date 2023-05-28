@@ -10,9 +10,21 @@ class Serializer:
 
     @staticmethod
     def get_object_type(obj) -> str:
+        """
+            Get_object_type returns the object type as a string.
+
+            :param obj: the object whose type you want to find out.
+            :type obj: object
+         """
         return re.search(r"\'(\w+)\'", str(type(obj)))[1]
 
     def serialize(self, obj):
+        """
+            Serialize, a method that serializes any python object.
+
+            :param obj: the object you want to serialize.
+            :type obj: object
+         """
         # Serialization of basic types.
         if isinstance(obj, tuple(BASIC_TYPES.values())):
             return self.__serialize_basic_types__(obj)
@@ -58,6 +70,12 @@ class Serializer:
 
     @staticmethod
     def is_iterator(obj):
+        """
+            is_iterator, a method that checks whether the object belongs to the iterator type.
+
+            :param obj: the object that you trust..
+            :type obj: object
+         """
         return hasattr(obj, '__iter__') and hasattr(obj, '__next__') and callable(obj.__iter__)
 
     def __serialize_basic_types__(self, obj):
@@ -217,6 +235,12 @@ class Serializer:
         return value
 
     def deserialize(self, obj):
+        """
+            deserialize, a method that deserializes any python object.
+
+            :param obj: the object you want to deserialize.
+            :type obj: object
+        """
 
         if obj["type"] in self.extract_keys(str(BASIC_TYPES.keys())):
             return self.__deserialize_basic_types__(obj)

@@ -13,6 +13,12 @@ def test(sep=" "):
 
 
 def parse_config_file(config_file):
+    """
+         parse_config_file, a function that reads arguments from the provided configuration file.
+
+         :param config_file: config_file file whose format is ini.
+         :type config_file: config_file.ini
+     """
     config = configparser.ConfigParser()
     config.read(config_file)
 
@@ -27,6 +33,9 @@ def parse_config_file(config_file):
 
 
 def parse_cli():
+    """
+         parse_cli, a function that reads arguments from the CMD.
+     """
     parser = argparse.ArgumentParser(description='JSON / XML serializer')
     parser.add_argument('source_file', type=str, help='Path to source file')
     parser.add_argument('source_format', type=str, choices=['json', 'xml'], help='Format of source file')
