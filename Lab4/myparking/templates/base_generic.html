@@ -19,6 +19,7 @@
         <nav class="navbar navbar-expand-xl navbar-light bg-light">
            <div class="container-fluid">
               <a class="navbar-brand" href="{% url 'index'%}">Home</a>
+              <a class="navbar-brand" href="{% url 'parking_list'%}">Parking's</a>
 
                 {% if user.is_authenticated %}
                     <label class="navbar-brand" >User: {{ user.get_username }}</label>
