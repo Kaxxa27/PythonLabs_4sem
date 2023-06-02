@@ -5,7 +5,7 @@ from .models import *
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'mark', 'model', 'license_plate', 'parking_spot')
+    list_display = ('owner', 'mark', 'model', 'license_plate', )
 
 
 @admin.register(ParkingSpot)
@@ -16,6 +16,11 @@ class ParkingSpotAdmin(admin.ModelAdmin):
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     list_display = ('user', )
+
+
+# @admin.register(User)
+# class UserAdmin(admin.ModelAdmin):
+#     list_display = ('username', )
 
 
 @admin.register(Payment)

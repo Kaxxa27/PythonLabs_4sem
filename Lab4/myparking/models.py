@@ -8,7 +8,7 @@ class Car(models.Model):
     mark = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     license_plate = models.CharField(max_length=20)
-    parking_spot = models.ForeignKey('ParkingSpot', on_delete=models.SET_NULL, null=True, blank=True)
+    # parking_spot = models.ForeignKey('ParkingSpot', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.mark} {self.model} ({self.license_plate})"
