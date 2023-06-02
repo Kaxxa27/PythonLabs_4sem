@@ -25,7 +25,7 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('client', 'amount', 'date')
+    list_display = ('owner', 'amount', 'date')
     list_filter = ('date', 'amount')
 
 

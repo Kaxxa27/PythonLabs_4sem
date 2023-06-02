@@ -18,8 +18,8 @@ class ParkingSpot(models.Model):
     number = models.PositiveIntegerField(unique=True, validators=[MaxValueValidator(1000)])
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_busy = models.BooleanField(default=False)
-    cars = models.ManyToManyField(Car, help_text="Select a car for this parking")
-
+    cars = models.ManyToManyField(Car, help_text="Select a car for this parking", blank=True, null=True)
+    user = models.ForeignKey(User,  on_delete=models.SET_NULL, related_name='parkings', blank=True, null=True)
     def __str__(self):
         return f"Parking Spot {self.number}"
 
@@ -32,7 +32,7 @@ class Client(models.Model):
 
 
 class Payment(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='payments')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
 
