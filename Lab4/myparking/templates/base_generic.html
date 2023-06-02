@@ -19,6 +19,14 @@
         <nav class="navbar navbar-expand-xl navbar-light bg-light">
            <div class="container-fluid">
               <a class="navbar-brand" href="{% url 'index'%}">Home</a>
+
+                {% if user.is_authenticated %}
+                    <label class="navbar-brand" >User: {{ user.get_username }}</label>
+                    <a class="navbar-brand" href="{% url 'logout'%}">Logout</a>
+                {% else %}
+                    <a class="navbar-brand" href="{% url 'login'%}">Login</a>
+                    <a class="navbar-brand" href="{% url 'register'%}">Registration</a>
+                {% endif %}
            </div>
         </nav>
   </div>
