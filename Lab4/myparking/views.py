@@ -2,7 +2,7 @@ import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import RegistrationForm
+from .forms import *
 from .models import *
 
 
@@ -101,3 +101,20 @@ def my_cars(request):
         'myparking/my_cars.html',
         context={'cars': cars, 'cars_count': cars_count, },
     )
+
+
+def add_car(request):
+    if request.method == 'POST':
+        form = CarForm(request.POST)
+        if form.is_valid():
+            car = form.save(commit=False)
+            car.owner = request.user  # Установка владельца
+            car.save()
+            cars = request.user.cars.all()
+            return render(request,
+                          'myparking/my_cars.html',
+                          context={'cars': cars, 'cars_count': cars.count(), }, )
+    else:
+        form = CarForm()
+
+    return render(request, 'myparking/add_car.html', {'form': form})
