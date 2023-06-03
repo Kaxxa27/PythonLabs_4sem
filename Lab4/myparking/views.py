@@ -118,3 +118,12 @@ def add_car(request):
         form = CarForm()
 
     return render(request, 'myparking/add_car.html', {'form': form})
+
+
+def delete_car(request, id):
+    try:
+        Car.objects.filter(id=id).delete()
+    except Exception as e:
+        print(f"Удаление не получилось. Код ошибки {str(e)}")
+    return redirect('my_cars')
+

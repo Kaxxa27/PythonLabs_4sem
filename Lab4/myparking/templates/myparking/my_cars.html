@@ -18,6 +18,7 @@
                         <th>Марка</th>
                         <th>Модель</th>
                         <th>Номер</th>
+                        <th>Опции</th>
                     </tr>
                     </thead>
                 <tbody>
@@ -27,6 +28,9 @@
                              <td>{{ car.mark }}</td>
                              <td>{{ car.model }}</td>
                              <td>{{ car.license_plate }}</td>
+                             <td>
+                                 <a href="{% url 'delete_car' car.id %}" class="btn btn-danger">Удалить</a>
+                             </td>
                          </tr>
                     {% endfor %}
                 </tbody>
