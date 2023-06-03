@@ -1,0 +1,41 @@
+{% extends "base_generic.html"%}
+
+{% block title%}
+<title>My Parkings</title>
+{% endblock %}
+
+{% block content%}
+
+<div class="row">
+    <div class="col-sm-12">
+        <p>Всего парковочных мест: {{ parkings_count }}</p>
+        <h1>Список ваших парковочных мест: </h1>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Номер места</th>
+                    <th>Цена/Месяц</th>
+                    <th>Машины на парковке</th>
+                </tr>
+                </thead>
+            <tbody>
+            {% if parkings %}
+                {% for parking in parkings %}
+                     <tr>
+                         <td>{{ parking.number }}</td>
+                         <td>{{ parking.price }}$</td>
+                         <td>
+                            {% for car in parking.cars.all %}
+                            <label>{{car}}</label>
+                            {% endfor %}
+                        </td>
+                     </tr>
+                {% endfor %}
+            {% else %}
+                <h2> You don't have any parking spaces available.</h2>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

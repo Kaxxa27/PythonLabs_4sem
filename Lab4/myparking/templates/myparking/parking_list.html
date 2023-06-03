@@ -19,11 +19,11 @@
              </p>
              <p>
                  <label for="filter_min_price">Минимальная цена:</label>
-                 <input type="number" id="filter_min_price" name="min_price" value="{{ request.GET.min_price }}" step="1">
+                 <input type="number" placeholder="$" id="filter_min_price" name="min_price" value="{{ request.GET.min_price }}" step="1">
              </p>
              <p>
                  <label for="filter_max_price">Максимальная цена:</label>
-                 <input type="number" id="filter_max_price" name="max_price" value="{{ request.GET.max_price }}" step="1">
+                 <input type="number" placeholder="$" id="filter_max_price" name="max_price" value="{{ request.GET.max_price }}" step="1">
              </p>
              <button type="submit">Применить</button>
          </form></p>
@@ -35,7 +35,7 @@
              <thead class="thead-dark">
                  <tr>
                      <th>Номер места</th>
-                     <th>Цена</th>
+                     <th>Цена/Месяц</th>
                      <th>Занято</th>
                      <th>Машины на парковке</th>
                  </tr>

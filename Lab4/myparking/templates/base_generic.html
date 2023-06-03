@@ -23,6 +23,7 @@
 
                 {% if user.is_authenticated %}
                     <label class="navbar-brand" >User: {{ user.get_username }}</label>
+                    <a class="navbar-brand" href="{% url 'my_parking_list'%}">My Parkings</a>
                     <a class="navbar-brand" href="{% url 'logout'%}">Logout</a>
                 {% else %}
                     <a class="navbar-brand" href="{% url 'login'%}">Login</a>

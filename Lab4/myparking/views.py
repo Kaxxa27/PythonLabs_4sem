@@ -30,6 +30,7 @@ def registration_view(request):
         form = RegistrationForm()
     return render(request, 'registration.html', {'form': form})
 
+
 def parking_list(request):
     filter_busy = request.GET.get('busy')
     filter_min_price = request.GET.get('min_price')
@@ -75,4 +76,18 @@ def rent_parking(request, id):
         request,
         'myparking/rent_parking.html',
         context={'parking': parking, },
+    )
+
+
+def my_parking_list(request):
+    user = request.user
+    parkings = user.parkings.all()
+    print(type(parkings))
+    print(user.parkings.count())
+    parkings_count = parkings.count()
+
+    return render(
+        request,
+        'myparking/my_parking_list.html',
+        context={'parkings': parkings, 'parkings_count': parkings_count, },
     )
