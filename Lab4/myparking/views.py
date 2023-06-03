@@ -128,26 +128,32 @@ def delete_car(request, id):
     return redirect('my_cars')
 
 
-def add_car_in_parkingslot(request, id):
-    parking = get_object_or_404(ParkingSpot, id=id)
-    user_cars = request.user.cars.all()
-    parking_cars = parking.cars.all()
-    cars_to_add = user_cars.difference(parking_cars)
+def car_in_park(request, park_id, status):
+    parking = get_object_or_404(ParkingSpot, id=park_id)
+
+    if status == 'add':
+        user_cars = request.user.cars.all()
+        parking_cars = parking.cars.all()
+        cars_to_add = user_cars.difference(parking_cars)
+    if status == 'del':
+        cars_to_add = parking.cars.all()
 
     return render(
         request,
         'myparking/car_list_for_park.html',
-        context={'parking': parking, 'cars': cars_to_add},
+        context={'parking': parking, 'cars': cars_to_add,
+                 'cars_count': cars_to_add.count(), 'status': status},
     )
 
 
-def add_car_to_parking(request, car_id, park_id):
+def interaction_car_for_parking(request, car_id, park_id, status):
     car = get_object_or_404(Car, id=car_id)
     parking = get_object_or_404(ParkingSpot, id=park_id)
     try:
-        print(parking.cars.all())
-        parking.cars.add(car)
-        print(parking.cars.all())
+        if status == 'add':
+            parking.cars.add(car)
+        if status == 'del':
+            parking.cars.remove(car)
     except Exception as e:
-        print(f"Удаление не получилось. Код ошибки {str(e)}")
+        print(f"Код ошибки {str(e)}")
     return redirect('my_parking_list')

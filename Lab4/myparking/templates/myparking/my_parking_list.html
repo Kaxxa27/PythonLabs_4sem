@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block content%}
-
 <div class="row">
     <div class="col-sm-12">
         <p>Всего парковочных мест: {{ parkings_count }}</p>
@@ -31,15 +30,18 @@
                                      <p><label>{{car}}</label></p>
                                      {% endfor %}
                                      <td>
-                                         <a href="{% url 'add_car_in_parkingslot' parking.id %}" class="btn btn-success">Добавить авто</a>
+                                         <p><a href="{% url 'car_in_park' parking.id 'add' %}"
+                                               class="btn btn-success" style="width:130px;">Добавить авто</a></p>
+                                         <p><a href="{% url 'car_in_park' parking.id 'del' %}"
+                                               class="btn btn-danger" style="width:130px;">Удалить авто</a></p>
                                      </td>
                                 </td>
                          </tr>
                     {% endfor %}
                 </tbody>
             </table>
-         {% else %}
-                <h2> You don't have any parking spaces available.</h2>
+        {% else %}
+            <h2> You don't have any parking spaces available.</h2>
         {% endif %}
     </div>
 </div>
