@@ -82,12 +82,22 @@ def rent_parking(request, id):
 def my_parking_list(request):
     user = request.user
     parkings = user.parkings.all()
-    print(type(parkings))
-    print(user.parkings.count())
     parkings_count = parkings.count()
 
     return render(
         request,
         'myparking/my_parking_list.html',
         context={'parkings': parkings, 'parkings_count': parkings_count, },
+    )
+
+
+def my_cars(request):
+    user = request.user
+    cars = user.cars.all()
+    cars_count = cars.count()
+
+    return render(
+        request,
+        'myparking/my_cars.html',
+        context={'cars': cars, 'cars_count': cars_count, },
     )
