@@ -127,3 +127,27 @@ def delete_car(request, id):
         print(f"Удаление не получилось. Код ошибки {str(e)}")
     return redirect('my_cars')
 
+
+def add_car_in_parkingslot(request, id):
+    parking = get_object_or_404(ParkingSpot, id=id)
+    user_cars = request.user.cars.all()
+    parking_cars = parking.cars.all()
+    cars_to_add = user_cars.difference(parking_cars)
+
+    return render(
+        request,
+        'myparking/car_list_for_park.html',
+        context={'parking': parking, 'cars': cars_to_add},
+    )
+
+
+def add_car_to_parking(request, car_id, park_id):
+    car = get_object_or_404(Car, id=car_id)
+    parking = get_object_or_404(ParkingSpot, id=park_id)
+    try:
+        print(parking.cars.all())
+        parking.cars.add(car)
+        print(parking.cars.all())
+    except Exception as e:
+        print(f"Удаление не получилось. Код ошибки {str(e)}")
+    return redirect('my_parking_list')
