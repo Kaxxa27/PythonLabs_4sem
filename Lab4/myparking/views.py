@@ -171,7 +171,12 @@ def my_payments(request):
     datetimes = [datetime.combine(payment.receipt_date, payment.receipt_time) for payment in payments]
     time_to_repay_the_payment = timedelta(weeks=1)
     current_datetime = datetime.now()
-    datetimes_for_repay_the_payment = [dt + time_to_repay_the_payment - current_datetime for dt in datetimes]
+    zero_timedelta = timedelta(0)
+    datetimes_for_repay_the_payment = [
+        dt + time_to_repay_the_payment - current_datetime
+        if dt + time_to_repay_the_payment - current_datetime >= zero_timedelta else 0
+        for dt in datetimes
+    ]
 
     return render(
         request,
