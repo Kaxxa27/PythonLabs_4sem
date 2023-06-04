@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 
   {% block title %}<title>My Parking</title>{% endblock %}
   <meta charset="utf-8">
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'myparking/css/site_style.css' %}">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/site_style.css' %}">
+
 </head>
 
 <body>
@@ -29,6 +34,8 @@
                     <a class="navbar-brand" href="{% url 'my_payments'%}">My Payments</a>
                     <a class="navbar-brand" href="{% url 'logout'%}">Logout</a>
                 {% else %}
+                    <a class="navbar-brand" href="{% url 'get_ip'%}">Server IP</a>
+                    <a class="navbar-brand" href="{% url 'get_fact_about_cats' %}">Fact about cats</a>
                     <a class="navbar-brand" href="{% url 'login'%}">Login</a>
                     <a class="navbar-brand" href="{% url 'register'%}">Registration</a>
                 {% endif %}
@@ -36,11 +43,11 @@
         </nav>
   </div>
 
-  <div class="main-container">
-    <div class="row">
-      {% block content %}
-      {% endblock %}
-    </div>
+  <div class="my-main-container">
+          <div class="row">
+            {% block content %}
+            {% endblock %}
+          </div>
   </div>
 
 </body>

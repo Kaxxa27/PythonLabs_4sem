@@ -48,7 +48,11 @@
                      <td>{{ parking.is_busy }}</td>
                      <td>
                          {% if not parking.is_busy %}
-                            <a href="{% url 'rent_parking' parking.id %}" class="btn btn-primary">Аренда</a>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'rent_parking' parking.id %}" class="btn btn-primary">Аренда</a>
+                            {% else %}
+                                <a href="" class="btn btn-primary" disabled>Аренда</a>
+                            {% endif %}
                          {% else %}
                             <label>Место занято!</label>
                          {% endif %}

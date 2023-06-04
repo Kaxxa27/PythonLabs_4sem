@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+import requests
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import *
@@ -255,3 +257,30 @@ def update_payments(request):
             park.save()
     return redirect('my_payments')
 
+
+def get_ip(request):
+    url = f'https://api.ipify.org?format=json'
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return render(request, 'myparking/get_ip.html',
+                      {'ip': data['ip'], })
+    else:
+        error_message = f"Error: {response.status_code}"
+        return render(request, 'myparking/get_ip.html',
+                      {'error_message': error_message})
+
+
+def get_fact_about_cats(request):
+    url = f'https://catfact.ninja/fact'
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return render(request, 'myparking/get_fact_about_cats.html',
+                      {'fact': data['fact'], })
+    else:
+        error_message = f"Error: {response.status_code}"
+        return render(request, 'myparking/get_fact_about_cats.html',
+                      {'error_message': error_message})

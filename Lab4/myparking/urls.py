@@ -30,4 +30,11 @@ urlpatterns = [
           views.payment_paid, name='payment_paid'),
      path('update_payments/',
           views.update_payments, name='update_payments'),
+
+     # API
+     path('get_ip/',
+          views.get_ip, name='get_ip'),
+     path('get_fact_about_cats/',
+          views.get_fact_about_cats, name='get_fact_about_cats'),
+
 ]
