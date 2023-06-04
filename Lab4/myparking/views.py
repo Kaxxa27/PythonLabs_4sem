@@ -162,9 +162,27 @@ def interaction_car_for_parking(request, car_id, park_id, status):
     return redirect('my_parking_list')
 
 
+def delete_park(request, park_id):
+    parking = get_object_or_404(ParkingSpot, id=park_id)
+    user = request.user
+    try:
+        for payment in user.payments.filter(park_id=park_id):
+            if not payment.is_paid:
+                return render(request, 'myparking/not_all_payments_paid.html')
+        parking.is_busy = False
+        parking.save()
+        user.parkings.remove(parking)
+
+    except Exception as e:
+        print(f"Код ошибки {str(e)}")
+    return redirect('my_parking_list')
+
+
 def my_payments(request):
     user = request.user
     payments = user.payments.all()
+
+    payments = payments.order_by('-id')
     payments_count = payments.count()
 
     # Создание массива, для вычисления, сколько дней осталось до погашения платежей
@@ -178,6 +196,7 @@ def my_payments(request):
         if dt + time_to_repay_the_payment - current_datetime >= zero_timedelta else 0
         for dt in datetimes
     ]
+
 
     return render(
         request,

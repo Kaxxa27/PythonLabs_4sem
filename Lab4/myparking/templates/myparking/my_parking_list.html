@@ -34,6 +34,8 @@
                                                class="btn btn-success" style="width:130px;">Добавить авто</a></p>
                                          <p><a href="{% url 'car_in_park' parking.id 'del' %}"
                                                class="btn btn-danger" style="width:130px;">Удалить авто</a></p>
+                                         <p><a href="{% url 'delete_park' parking.id %}"
+                                               class="btn btn-danger" style="width:130px;">Снять с аренды</a></p>
                                      </td>
                                 </td>
                          </tr>
