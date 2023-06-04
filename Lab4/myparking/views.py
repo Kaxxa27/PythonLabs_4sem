@@ -62,6 +62,7 @@ def rent_parking(request, id):
 
     if request.method == 'POST':
         # Присвоение парковочного места пользователю
+
         user.parkings.add(parking)
         сurrent_date = datetime.now()
         payment = Payment(owner=user,
@@ -72,6 +73,7 @@ def rent_parking(request, id):
         payment.save()
         user.payments.add(payment)
         parking.is_busy = True
+        parking.date_of_rent = сurrent_date
         parking.save()
         return redirect('parking_list')  # Перенаправление на список парковочных мест
 
@@ -197,7 +199,6 @@ def my_payments(request):
         for dt in datetimes
     ]
 
-
     return render(
         request,
         'myparking/my_payments.html',
@@ -229,3 +230,28 @@ def payment_paid(request, payment_id):
         'myparking/payment_paid.html',
         context={'payment': payment, },
     )
+
+
+def update_payments(request):
+    user = request.user
+    payments = user.payments.all()
+    current_date = datetime.now()
+    # time_to_repeat_the_payment = timedelta(weeks=4)
+    time_to_repeat_the_payment = timedelta(days=1)
+    for park in user.parkings.all():
+        print(park.date_of_rent)
+        print(time_to_repeat_the_payment)
+        print(park.date_of_rent + time_to_repeat_the_payment)
+
+        if park.date_of_rent + time_to_repeat_the_payment <= current_date.date():
+            new_payment = Payment(owner=user,
+                                  park=park,
+                                  amount=park.price,
+                                  receipt_date=current_date,
+                                  receipt_time=current_date.time())
+            new_payment.save()
+            user.payments.add(new_payment)
+            park.date_of_rent = current_date
+            park.save()
+    return redirect('my_payments')
+

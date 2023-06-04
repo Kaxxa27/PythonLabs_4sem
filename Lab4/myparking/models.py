@@ -21,6 +21,7 @@ class ParkingSpot(models.Model):
     is_busy = models.BooleanField(default=False)
     cars = models.ManyToManyField(Car, help_text="Select a car for this parking", blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='parkings', blank=True, null=True)
+    date_of_rent = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f"Parking Spot {self.number}"

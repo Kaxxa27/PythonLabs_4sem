@@ -15,7 +15,8 @@
         <h2>Оплата парковочного места должна производиться вовремя!</h2>
         <h2>Максимальный срок задержки оплаты 7 дней!</h2>
         <h3>По истечению срока, платеж будет считаться долгом!</h3>
-        <h1>Список платежей: </h1>
+        <label style="font-size: 32px; font-weight: bold;">Список платежей:</label>
+        <a href="{% url 'update_payments' %}" class="btn btn-success">Обновить список</a>
             <table class="table table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>

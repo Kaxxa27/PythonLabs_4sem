@@ -28,4 +28,6 @@ urlpatterns = [
           views.my_payments, name='my_payments'),
      path('payment_paid/<int:payment_id>/',
           views.payment_paid, name='payment_paid'),
+     path('update_payments/',
+          views.update_payments, name='update_payments'),
 ]
