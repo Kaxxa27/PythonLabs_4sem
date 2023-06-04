@@ -5,17 +5,20 @@ from .models import *
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'mark', 'model', 'license_plate', )
+    list_display = ('owner', 'mark', 'model', 'license_plate',)
+    list_filter = ('owner', 'mark', 'model', 'license_plate',)
 
 
 @admin.register(ParkingSpot)
 class ParkingSpotAdmin(admin.ModelAdmin):
     list_display = ('number', 'price', 'is_busy')
+    list_filter = ('number', 'price', 'is_busy')
 
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('user', )
+    list_display = ('user',)
+    list_filter = ('user',)
 
 
 @admin.register(Payment)
