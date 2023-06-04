@@ -180,3 +180,27 @@ def my_payments(request):
                  'payments_count': payments_count,
                  'datetimes_for_repay_the_payment': datetimes_for_repay_the_payment},
     )
+
+
+def payment_paid(request, payment_id):
+    user = request.user
+    payment = get_object_or_404(Payment, id=payment_id)
+
+    if request.method == 'POST':
+        if user.account.amount < payment.amount:
+            return render(request, 'myparking/not_enough_money_for_paid.html')
+
+        payment.repayment_date = datetime.now()
+        payment.repayment_time = payment.repayment_date.time()
+        payment.is_paid = True
+        payment.save()
+
+        user.account.amount -= payment.amount
+        user.account.save()
+        return redirect('my_payments')
+
+    return render(
+        request,
+        'myparking/payment_paid.html',
+        context={'payment': payment, },
+    )

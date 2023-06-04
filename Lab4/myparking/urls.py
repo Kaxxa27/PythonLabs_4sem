@@ -15,7 +15,8 @@ urlpatterns = [
      path('delete_car/<int:id>/', views.delete_car, name='delete_car'),
 
      # Пути для перехода к списку машин на паркинге (status = add/del)
-     path('car_in_park/<int:park_id>/<slug:status>/', views.car_in_park, name='car_in_park'),
+     path('car_in_park/<int:park_id>/<slug:status>/',
+          views.car_in_park, name='car_in_park'),
 
      # Пути для перехода к действиям с авто из паркинга ("На паркинг", "С паркинга")
      path('interaction_car_for_parking/<int:car_id>/<int:park_id>/<slug:status>/',
@@ -24,4 +25,6 @@ urlpatterns = [
      #  Payments
      path('my_payments/',
           views.my_payments, name='my_payments'),
+     path('payment_paid/<int:payment_id>/',
+          views.payment_paid, name='payment_paid'),
 ]

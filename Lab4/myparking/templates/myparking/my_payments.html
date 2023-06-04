@@ -45,6 +45,11 @@
                                   {% endif %}
                              </td>
                              <td><p>{{ date_to_repay }}</p></td>
+                             {% if not payment.is_paid %}
+                                <td><a href="{% url 'payment_paid' payment.id %}" class="btn btn-success">Оплатить</a></td>
+                             {% else %}
+                                 <td><a href="" class="btn btn-info" disabled>Оплачено</a></td>
+                             {% endif %}
                          </tr>
                     {% endfor %}
                 </tbody>
