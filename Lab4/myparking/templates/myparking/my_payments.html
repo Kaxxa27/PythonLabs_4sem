@@ -29,7 +29,8 @@
                 </thead>
                 <tbody>
                     {% for payment, date_to_repay in payments|zip_lists:datetimes_for_repay_the_payment %}
-                         <tr>
+                         <tr {% if not payment.is_paid and date_to_repay == 0 %}
+                             style="background-color: red;"{% endif %}>
                              <td>{{ payment.park.number }}</td>
                              <td>{{ payment.amount }}$</td>
                              <td>

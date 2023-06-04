@@ -170,6 +170,7 @@ def my_payments(request):
     # Создание массива, для вычисления, сколько дней осталось до погашения платежей
     datetimes = [datetime.combine(payment.receipt_date, payment.receipt_time) for payment in payments]
     time_to_repay_the_payment = timedelta(weeks=1)
+    # time_to_repay_the_payment = timedelta(seconds=20)
     current_datetime = datetime.now()
     zero_timedelta = timedelta(0)
     datetimes_for_repay_the_payment = [
