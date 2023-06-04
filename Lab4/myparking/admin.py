@@ -18,15 +18,10 @@ class ClientAdmin(admin.ModelAdmin):
     list_display = ('user', )
 
 
-# @admin.register(User)
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ('username', )
-
-
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'amount', 'date')
-    list_filter = ('date', 'amount')
+    list_display = ('owner', 'park', 'amount', 'receipt_date', 'is_paid', 'repayment_date')
+    list_filter = ('receipt_date', 'is_paid', 'repayment_date', 'amount')
 
 
 @admin.register(Account)

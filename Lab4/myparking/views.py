@@ -1,5 +1,4 @@
-import datetime
-
+from datetime import datetime, timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import *
@@ -64,10 +63,14 @@ def rent_parking(request, id):
     if request.method == 'POST':
         # Присвоение парковочного места пользователю
         user.parkings.add(parking)
-        payment = Payment(owner=user, amount=parking.price, date=datetime.date.today())
+        сurrent_date = datetime.now()
+        payment = Payment(owner=user,
+                          park=parking,
+                          amount=parking.price,
+                          receipt_date=сurrent_date,
+                          receipt_time=сurrent_date.time())
         payment.save()
         user.payments.add(payment)
-
         parking.is_busy = True
         parking.save()
         return redirect('parking_list')  # Перенаправление на список парковочных мест
@@ -157,3 +160,23 @@ def interaction_car_for_parking(request, car_id, park_id, status):
     except Exception as e:
         print(f"Код ошибки {str(e)}")
     return redirect('my_parking_list')
+
+
+def my_payments(request):
+    user = request.user
+    payments = user.payments.all()
+    payments_count = payments.count()
+
+    # Создание массива, для вычисления, сколько дней осталось до погашения платежей
+    datetimes = [datetime.combine(payment.receipt_date, payment.receipt_time) for payment in payments]
+    time_to_repay_the_payment = timedelta(weeks=1)
+    current_datetime = datetime.now()
+    datetimes_for_repay_the_payment = [dt + time_to_repay_the_payment - current_datetime for dt in datetimes]
+
+    return render(
+        request,
+        'myparking/my_payments.html',
+        context={'payments': payments,
+                 'payments_count': payments_count,
+                 'datetimes_for_repay_the_payment': datetimes_for_repay_the_payment},
+    )

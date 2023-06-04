@@ -20,4 +20,8 @@ urlpatterns = [
      # Пути для перехода к действиям с авто из паркинга ("На паркинг", "С паркинга")
      path('interaction_car_for_parking/<int:car_id>/<int:park_id>/<slug:status>/',
           views.interaction_car_for_parking, name='interaction_car_for_parking'),
+
+     #  Payments
+     path('my_payments/',
+          views.my_payments, name='my_payments'),
 ]
