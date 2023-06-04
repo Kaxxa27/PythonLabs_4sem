@@ -26,5 +26,5 @@ class PaymentAdmin(admin.ModelAdmin):
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('client', 'amount')
-    list_filter = ('amount', 'client')
+    list_display = ('user', 'amount')
+    list_filter = ('amount', 'user')

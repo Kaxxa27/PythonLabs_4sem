@@ -15,7 +15,7 @@ class RegistrationForm(UserCreationForm):
         user.save()
         client = Client(user=user)
         client.save()
-        account = Account(client=client)
+        account = Account(user=user)
         account.save()
         return user
 

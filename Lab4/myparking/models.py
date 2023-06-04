@@ -8,6 +8,7 @@ class Car(models.Model):
     mark = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     license_plate = models.CharField(max_length=20)
+
     # parking_spot = models.ForeignKey('ParkingSpot', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -19,7 +20,8 @@ class ParkingSpot(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_busy = models.BooleanField(default=False)
     cars = models.ManyToManyField(Car, help_text="Select a car for this parking", blank=True, null=True)
-    user = models.ForeignKey(User,  on_delete=models.SET_NULL, related_name='parkings', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='parkings', blank=True, null=True)
+
     def __str__(self):
         return f"Parking Spot {self.number}"
 
@@ -33,7 +35,7 @@ class Client(models.Model):
 
 class Payment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
-    park = models.ForeignKey(ParkingSpot, on_delete=models.CASCADE,related_name='parking_spot', blank=True, null=True)
+    park = models.ForeignKey(ParkingSpot, on_delete=models.CASCADE, related_name='parking_spot', blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)
     # Дата начисления
@@ -44,7 +46,6 @@ class Payment(models.Model):
     repayment_time = models.TimeField(blank=True, null=True)
 
 
-
-class Account(models.Model): # счет в банке, для возможности оплаты
-    client = models.OneToOneField(Client, on_delete=models.CASCADE, related_name='accounts')
+class Account(models.Model):  # счет в банке, для возможности оплаты
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='account')
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
