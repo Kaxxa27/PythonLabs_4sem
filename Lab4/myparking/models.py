@@ -33,8 +33,16 @@ class Client(models.Model):
 
 class Payment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+    park = models.ForeignKey(ParkingSpot, on_delete=models.CASCADE,related_name='parking_spot', blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
+    is_paid = models.BooleanField(default=False)
+    # Дата начисления
+    receipt_date = models.DateField(blank=True, null=True)
+    receipt_time = models.TimeField(blank=True, null=True)
+    # Дата погашения платежа
+    repayment_date = models.DateField(blank=True, null=True)
+    repayment_time = models.TimeField(blank=True, null=True)
+
 
 
 class Account(models.Model): # счет в банке, для возможности оплаты
