@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+  {% block title %}<title>My Parking</title>{% endblock %}
+  <meta charset="utf-8">
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'myparking/css/site_style.css' %}">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+    <div>
+        <!--Main NavBar-->
+        <nav class="navbar navbar-expand-xl navbar-light bg-light">
+           <div class="container-fluid">
+              <a class="navbar-brand" href="{% url 'index'%}">Home</a>
+              <a class="navbar-brand" href="{% url 'parking_list'%}">Parking's</a>
+
+                {% if user.is_authenticated %}
+                    <label class="navbar-brand" >User: {{ user.get_username }}</label>
+                    <label class="navbar-brand" >Account: {{ user.account.amount }}$</label>
+                    <a class="navbar-brand" href="{% url 'my_parking_list'%}">My Parkings</a>
+                    <a class="navbar-brand" href="{% url 'my_cars'%}">My Cars</a>
+                    <a class="navbar-brand" href="{% url 'my_payments'%}">My Payments</a>
+                    <a class="navbar-brand" href="{% url 'logout'%}">Logout</a>
+                {% else %}
+                    <a class="navbar-brand" href="{% url 'get_ip'%}">Server IP</a>
+                    <a class="navbar-brand" href="{% url 'get_fact_about_cats' %}">Fact about cats</a>
+                    <a class="navbar-brand" href="{% url 'login'%}">Login</a>
+                    <a class="navbar-brand" href="{% url 'register'%}">Registration</a>
+                {% endif %}
+           </div>
+        </nav>
+  </div>
+
+  <div class="my-main-container">
+          <div class="row">
+            {% block content %}
+            {% endblock %}
+          </div>
+  </div>
+
+</body>
+</html>
